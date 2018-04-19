@@ -9,5 +9,5 @@ int main() {
 						// Due to the simple nature of our objects rendering things this slow should not cause visual discomfort or lage
 	
 	// this kicks off the running of my app
-	ofRunApp(new snakelinkedlist::snakeGame());
+	ofRunApp(new adventureGame());
 }
