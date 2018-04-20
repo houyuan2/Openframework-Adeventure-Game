@@ -12,6 +12,7 @@
 #include "Items.hpp"
 #include <map>
 #include <vector>
+#include "json.hpp"
 
 class GameRoom {
     struct Room {
@@ -25,6 +26,8 @@ private:
     std::vector<Room> rooms;
     std::vector<Monster> monsters;
     std::vector<GameItem> items;
+    std::string start_room;
+    std::string end_room;
 };
 
 #endif /* GameRoom_hpp */
