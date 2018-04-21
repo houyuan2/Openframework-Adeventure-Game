@@ -7,7 +7,7 @@ void adventureGame::setup(){
 
 	srand(static_cast<unsigned>(time(0)));
     
-    character.load("/Users/petersha/Desktop/final-project-houyuan2/src/images/character.png");
+    character.load("images/character.png");
 }
 
 void adventureGame::draw(){

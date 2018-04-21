@@ -19,6 +19,6 @@ void from_json(const nlohmann::json& j, Room& room) {
     room.room_monster = j.at("room_monster").get<std::string>();
     room.room_weapons = j.at("room_weapons").get<std::map<std::string, Weapon>>();
     room.room_shields = j.at("room_shields").get<std::map<std::string, Shield>>();
-    room.room_apples = j.at("room_apples").get<std::map<std::string, Apple>>();
+    room.room_apple = j.at("room_apple").get<Apple>();
     room.doors = j.at("doors").get<std::map<std::string, Door>>();
 }
