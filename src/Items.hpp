@@ -21,6 +21,7 @@ private:
     int defence_num;
     int max_health;
     int actual_health;
+    bool is_dead = false;
     
     friend void from_json(const nlohmann::json& j, Monster& monster);
 public:
@@ -28,9 +29,11 @@ public:
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
     int getAttackNum() {return attack_num;};
-    int getDefenceNum(){return defence_num;};
-    int getMaxHealth(){return max_health;};
-    int getActualHealth(){return actual_health;};
+    int getDefenceNum() {return defence_num;};
+    int getMaxHealth() {return max_health;};
+    int getActualHealth() {return actual_health;};
+    bool getState() {return is_dead;};
+    void setState(bool state) {is_dead = state;};
 };
 
 class Weapon {
