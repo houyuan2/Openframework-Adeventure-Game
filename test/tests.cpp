@@ -20,3 +20,11 @@ TEST_CASE("basic parsing test") {
     Game myGame = j;
     REQUIRE(myGame.getStart_room() == "gate");
 }
+
+TEST_CASE("room_monsters") {
+    std::ifstream i("../bin/final_adventure.json");
+    nlohmann::json j;
+    i >> j;
+    Game myGame = j;
+    REQUIRE(myGame.getRooms().at(myGame.getStart_room()).room_monsters.at(0) == "Werewolf");
+}

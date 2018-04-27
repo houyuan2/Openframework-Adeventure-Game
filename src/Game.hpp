@@ -17,7 +17,7 @@
 
 struct Room {
     std::string name;
-    std::string room_monster;
+    std::vector<std::string> room_monsters;
     std::map<std::string, Weapon> room_weapons;
     std::map<std::string, Shield> room_shields;
     Apple room_apple;
