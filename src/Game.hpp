@@ -34,9 +34,9 @@ private:
     friend void from_json(const nlohmann::json& j, Game& game_room);
 
 public:
-    const std::map<std::string, Room> &getRooms() const;
+    const std::map<std::string, Room> &getRooms();
 
-    const std::map<std::string, Monster> &getMonsters() const;
+    const std::map<std::string, Monster> &getMonsters();
 
     const std::string &getStart_room() const;
 

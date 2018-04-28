@@ -1,49 +1,197 @@
 {
-  "rooms":{
-    "gate":{
-      "name":"gate", 
-      "room_monster":"dog",
-      "room_weapons":{
-        "knife":{
-          "name":"knife",
-          "position_x":"640",
-          "position_y":"480",
-          "attack_value":"20"
+  "rooms": {
+    "gate": {
+      "name": "gate",
+      "room_monsters": [
+        "Werewolf"
+      ],
+      "room_weapons": {
+        "knife": {
+          "name": "knife",
+          "position_x": 640,
+          "position_y": 480,
+          "attack_value": 20
         }
       },
-      "room_shields":{
-        "wood_shield":{
-          "name":"wood_shield",
-          "position_x":"640",
-          "position_y":"380",
-          "defence_value":"20"
+      "room_shields": {
+        "wood_shield": {
+          "name": "wood_shield",
+          "position_x": 640,
+          "position_y": 380,
+          "defence_value": 20
         }
       },
-      "room apple":{
-        "position_x":"640",
-        "position_y":"280"
+      "room_apple": {
+        "position_x": 640,
+        "position_y": 280
       },
-      "doors":{
-        "up":{
-          "name":"up",
-          "position_x":"640",
-          "position_y":"950",
-          "to_room":"lobby"
+      "doors": {
+        "up": {
+          "name": "up",
+          "position_x": 640,
+          "position_y": 10,
+          "to_room": "lobby"
+        }
+      }
+    },
+    "lobby": {
+      "name": "lobby",
+      "room_monsters": [
+        "Vampire",
+        "Zombie",
+        "Ghost"
+      ],
+      "doors": {
+        "up": {
+          "name": "up",
+          "position_x": 640,
+          "position_y": 10,
+          "to_room": "final"
+        },
+        "left": {
+          "name": "left",
+          "position_x": 10,
+          "position_y": 480,
+          "to_room": "left_wing"
+        },
+        "right": {
+          "name": "right",
+          "position_x": 1270,
+          "position_y": 480,
+          "to_room": "right_wing"
+        },
+        "down": {
+          "name": "down",
+          "position_x": 640,
+          "position_y": 950,
+          "to_room": "gate"
+        }
+      }
+    },
+    "left_wing": {
+      "name": "left_wing",
+      "room_weapons": {
+        "sword": {
+          "name": "sword",
+          "position_x": 640,
+          "position_y": 480,
+          "attack_value": 50
+        }
+      },
+      "room_shields": {
+        "iron_shield": {
+          "name": "iron_shield",
+          "position_x": 640,
+          "position_y": 380,
+          "defence_value": 50
+        }
+      },
+      "room_apple": {
+        "position_x": 640,
+        "position_y": 280
+      },
+      "doors": {
+        "right": {
+          "name": "right",
+          "position_x": 1270,
+          "position_y": 480,
+          "to_room": "lobby"
+        }
+      }
+    },
+    "right_wing": {
+      "name": "left_wing",
+      "room_weapons": {
+        "laser_blade": {
+          "name": "laser_blade",
+          "position_x": 640,
+          "position_y": 480,
+          "attack_value": 500
+        }
+      },
+      "room_shields": {
+        "avalon": {
+          "name": "avalon",
+          "position_x": 640,
+          "position_y": 380,
+          "defence_value": 1000
+        }
+      },
+      "room_apple": {
+        "position_x": 640,
+        "position_y": 280
+      },
+      "doors": {
+        "left": {
+          "name": "left",
+          "position_x": 10,
+          "position_y": 480,
+          "to_room": "lobby"
+        }
+      }
+    },
+    "final": {
+      "name": "final",
+      "room_monsters": [
+        "Voldemort"
+      ],
+      "doors": {
+        "down": {
+          "name": "down",
+          "position_x": 640,
+          "position_y": 950,
+          "to_room": "lobby"
         }
       }
     }
   },
-  "monsters":{
-    "dog":{
-      "name": "dog",
-      "position_x":"640",
-      "position_y":"950",
-      "attack_num":"30",
-      "defence_num":"10",
-      "max_health":"10",
-      "actual_health":"10"
+  "monsters": {
+    "Werewolf": {
+      "name": "Werewolf",
+      "position_x": 640,
+      "position_y": 10,
+      "attack_num": 30,
+      "defence_num": 10,
+      "max_health": 10,
+      "actual_health": 10
+    },
+    "Vampire": {
+      "name": "Vampire",
+      "position_x": 10,
+      "position_y": 480,
+      "attack_num": 40,
+      "defence_num": 20,
+      "max_health": 20,
+      "actual_health": 20
+    },
+    "Zombie": {
+      "name": "Zombie",
+      "position_x": 640,
+      "position_y": 10,
+      "attack_num": 60,
+      "defence_num": 60,
+      "max_health": 100,
+      "actual_health": 100
+    },
+    "Ghost": {
+      "name": "Ghost",
+      "position_x": 1270,
+      "position_y": 480,
+      "attack_num": 100,
+      "defence_num": 80,
+      "max_health": 120,
+      "actual_health": 120
+    },
+    "Voldemort": {
+      "name": "Voldemort",
+      "position_x": 640,
+      "position_y": 950,
+      "attack_num": 200,
+      "defence_num": 200,
+      "max_health": 200,
+      "actual_health": 200
     }
   },
-  "start_room":"gate",
-  "end_room":"lobby"
+  "start_room": "gate",
+  "end_room": "lobby"
 }

@@ -46,19 +46,56 @@ void adventureGame::keyPressed(int key){
     }
 }
 
-//helper functions
-void drawRoom(Room room) {
+//draw functions
+void adventureGame::drawRoom(Room room) {
+    for (auto monster_name: room.room_monsters) {
+        Monster &monster_to_draw = myGame.getMonsters().at(monster_name);
+        if (!monster_to_draw.getState()) { //if monster is still alive
+            drawMonster(monster_to_draw);
+        }
+    }
     
+    for (auto value: room.doors) {
+        drawDoor(value.second);
+    }
+    
+    for (auto value: room.room_weapons) {
+        drawWeapon(value.second);
+    }
+    
+    for (auto value: room.room_shields) {
+        drawShield(value.second);
+    }
+    
+    if (room.room_apple != NULL) {
+        drawApple(room.room_apple);
+    }
 }
 
-void drawMonster(Monster monster) {
-    
+void adventureGame::drawMonster(Monster monster) {
+    monster_pics.at(monster.getName()).draw(monster.getPositionX(),monster.getPositionY(),50 ,50);
 }
-void drawDoor(Door door);
-void drawWeapon(Weapon weapon);
-void drawShield(Shield shield);
-void drawApple(Apple apple);
+
+void adventureGame::drawDoor(Door door) {
+    door_pic.draw(door.getPositionX(), door.getPositionY(),50 , 50);
+}
+
+void adventureGame::drawWeapon(Weapon weapon) {
+    weapon_pics.at(weapon.getName()).draw(weapon.getPositionX(),weapon.getPositionY(),50 ,50);
+}
+
+void adventureGame::drawShield(Shield shield) {
+    shield_pics.at(shield.getName()).draw(shield.getPositionX(),shield.getPositionY(),50 ,50);
+}
+
+void adventureGame::drawApple(Apple apple) {
+    apple_pic.draw(apple.getPositionX(), apple.getPositionY(), 50, 50);
+}
 
 void adventureGame::drawPlayer() {
     myPlayer.character.draw(myPlayer.character_X,myPlayer.character_Y, 50, 50);
+}
+
+void adventureGame::eventTrigger() {
+    
 }

@@ -31,11 +31,11 @@ void from_json(const nlohmann::json& j, Game& game) {
     game.end_room = j.at("end_room").get<std::string>();
 }
 
-const std::map<std::string, Room> &Game::getRooms() const {
+const std::map<std::string, Room> &Game::getRooms() {
     return rooms;
 }
 
-const std::map<std::string, Monster> &Game::getMonsters() const {
+const std::map<std::string, Monster> &Game::getMonsters() {
     return monsters;
 }
 
