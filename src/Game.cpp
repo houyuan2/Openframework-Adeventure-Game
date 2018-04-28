@@ -9,12 +9,18 @@
 
 void from_json(const nlohmann::json& j, Room& room) {
     room.name = j.at("name").get<std::string>();
-    room.room_monsters = j.at("room_monsters").get<std::vector<std::string>>();
-    if (j.at("room_weapons")) {
+    if (j.count("room_monsters") != 0) {
+        room.room_monsters = j.at("room_monsters").get<std::vector<std::string>>();
+    }
+    if (j.count("room_weapons") != 0) {
         room.room_weapons = j.at("room_weapons").get<std::map<std::string, Weapon>>();
     }
-    room.room_shields = j.at("room_shields").get<std::map<std::string, Shield>>();
-    room.room_apple = j.at("room_apple").get<Apple>();
+    if (j.count("room_shields") != 0) {
+        room.room_shields = j.at("room_shields").get<std::map<std::string, Shield>>();
+    }
+    if (j.count("room_apple") != 0) {
+        room.room_apple = j.at("room_apple").get<Apple>();
+    }
     room.doors = j.at("doors").get<std::map<std::string, Door>>();
 }
 
@@ -39,21 +45,4 @@ const std::string &Game::getStart_room() const {
 
 const std::string &Game::getEnd_room() const {
     return end_room;
-}
-
-void Player::move_character_X(int value) {
-    int new_pos = character_X + value;
-    if (new_pos > ofGetWindowWidth() || new_pos < 0) {
-        return;
-    }
-    character_X = new_pos;
-    return;
-}
-void Player::move_character_Y(int value) {
-    int new_pos = character_Y + value;
-    if (new_pos > ofGetWindowHeight() || new_pos < 0) {
-        return;
-    }
-    character_Y = new_pos;
-    return;
 }

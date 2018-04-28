@@ -8,6 +8,7 @@
 #include "ofMain.h"
 #include "Items.hpp"
 #include "Game.hpp"
+#include "Player.hpp"
 
 class adventureGame : public ofBaseApp {
 public:
@@ -28,5 +29,9 @@ public:
     //private helper functions;
     void drawRoom(Room room);
     void drawMonster(Monster monster);
+    void drawDoor(Door door);
+    void drawWeapon(Weapon weapon);
+    void drawShield(Shield shield);
+    void drawApple(Apple apple);
     void drawPlayer();
 };
