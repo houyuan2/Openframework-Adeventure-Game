@@ -68,8 +68,8 @@ public:
 
 class Apple {
 private:
-    int position_x;
-    int position_y;
+    int position_x = -1;
+    int position_y = -1;
     
     friend void from_json(const nlohmann::json& j, Apple& apple);
 public:

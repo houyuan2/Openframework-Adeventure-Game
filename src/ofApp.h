@@ -41,7 +41,7 @@ public:
 	// Event driven functions, called on appropriate user action
 	void keyPressed(int key);
     
-    //private helper functions;
+    //private helper functions
     void drawRoom(Room room);
     void drawMonster(Monster monster);
     void drawDoor(Door door);
@@ -51,6 +51,19 @@ public:
     
     void drawPlayer();
     
-    //determine collision;
-    void eventTrigger();
+    //determine collision
+    void mapEventTrigger();
+    Monster* meetMonster();
+    Door* meetDoor();
+    Weapon* meetWeapon();
+    Shield* meetShield();
+    void meetApple();
+    
+    //helper functions
+    void changeWeapon(Weapon weapon_to_change);
+    void changeShield(Shield shield_to_change);
+    
+    //duel functions
+    void attack();
+    void defense();
 };
