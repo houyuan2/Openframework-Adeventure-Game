@@ -15,7 +15,7 @@
 class Player {
 private:
     int character_X = 10;
-    int character_Y = 10;
+    int character_Y = 800;
     Weapon player_weapon;
     Shield player_shield;
     int player_max_health = 100;

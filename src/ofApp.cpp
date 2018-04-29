@@ -104,6 +104,13 @@ void adventureGame::drawRoom(Room* room) {
         drawDoor(value.second);
     }
     
+    for (auto monster_name: room->getRoomMonsters()) {
+        Monster &monster_to_draw = myGame.getMonsters().at(monster_name);
+        if (!monster_to_draw.getState()) { //if monster is still alive
+            drawMonster(monster_to_draw);
+        }
+    }
+    
     for (auto &value: room->getRoomWeapons()) {
         drawWeapon(value.second);
     }
