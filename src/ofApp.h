@@ -14,7 +14,8 @@
 enum GameState {
     IN_PROGRESS = 0,
     DUEL,
-    FINISHED
+    LOST,
+    WIN
 };
 
 class adventureGame : public ofBaseApp {
@@ -27,10 +28,12 @@ private:
     ofImage apple_pic;
     ofImage character;
     
+    GameState current_state = IN_PROGRESS;
+    
 public:
     Game myGame;
     Player myPlayer;
-    Room current_room;
+    Room* current_room;
     
 	// Function used for one time setup
 	void setup();
@@ -43,7 +46,7 @@ public:
 	void keyPressed(int key);
     
     //private helper functions
-    void drawRoom(Room room);
+    void drawRoom(Room* room);
     void drawMonster(Monster monster);
     void drawDoor(Door door);
     void drawWeapon(Weapon weapon);
@@ -65,6 +68,7 @@ public:
     void changeShield(Shield shield_to_change);
     
     //duel functions
-    void attack();
-    void defense();
+    void duel(Monster monster);
+    void attack(Monster monster);
+    void defense(Monster monster);
 };

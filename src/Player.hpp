@@ -24,6 +24,8 @@ private:
 public:
     int getPlayerPosX() {return character_X;};
     int getPlayerPosY() {return character_Y;};
+    void setPlayerPosX(int posX) {character_X = posX;};
+    void setPlayerPosY(int posY) {character_Y = posY;};
     void move_character_X(int value);
     void move_character_Y(int value);
     void addWeapon(Weapon weapon) {player_weapon = weapon;};

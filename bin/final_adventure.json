@@ -63,7 +63,7 @@
         "down": {
           "name": "down",
           "position_x": 640,
-          "position_y": 950,
+          "position_y": 480,
           "to_room": "gate"
         }
       }
@@ -139,7 +139,7 @@
         "down": {
           "name": "down",
           "position_x": 640,
-          "position_y": 950,
+          "position_y": 480,
           "to_room": "lobby"
         }
       }

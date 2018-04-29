@@ -32,8 +32,9 @@ public:
     int getDefenceNum() {return defence_num;};
     int getMaxHealth() {return max_health;};
     int getActualHealth() {return actual_health;};
+    void setAcutalHealth(int value) {actual_health = value;};
     bool getState() {return is_dead;};
-    void setState(bool state) {is_dead = state;};
+    void killed() {is_dead = true;};
 };
 
 class Weapon {
@@ -45,6 +46,7 @@ private:
     
     friend void from_json(const nlohmann::json& j, Weapon& weapon);
 public:
+    //Weapon() {name = ""; position_x = -1; position_y = -1; attack_value = -1;};
     std::string getName() {return name;};
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
@@ -60,6 +62,7 @@ private:
     
     friend void from_json(const nlohmann::json& j, Shield& shield);
 public:
+    //Shield() {name = "", position_x = -1; position_y = -1, defence_value = -1;};
     std::string getName() {return name;};
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
@@ -70,14 +73,14 @@ class Apple {
 private:
     int position_x = -1;
     int position_y = -1;
-    bool isConsumed = false;
+    bool eaten = false;
     
     friend void from_json(const nlohmann::json& j, Apple& apple);
 public:
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
-    void consume() {isConsumed = true;};
-    bool getState() {return isConsumed;};
+    void consume() {eaten = true;};
+    bool isConsumed() {return eaten;};
 };
 
 class Door {
