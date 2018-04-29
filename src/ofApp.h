@@ -29,6 +29,9 @@ private:
     ofImage character;
     ofImage background;
     
+    //font file
+    ofTrueTypeFont myfont;
+    
     GameState current_state = IN_PROGRESS;
     
 public:

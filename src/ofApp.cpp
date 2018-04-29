@@ -56,6 +56,9 @@ void adventureGame::setup(){
     voldemort.load("images/voldemort.png");
     monster_pics["Voldemort"] = voldemort;
     
+    //font loading
+    myfont.load("../../../data/arial.ttf", 50);
+    
     //object set up
     std::ifstream i("../../../data/final_adventure.json");
     nlohmann::json j;
@@ -117,6 +120,7 @@ void adventureGame::keyPressed(int key) {
 //draw functions
 void adventureGame::drawRoom(Room* room) {
     background.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+    myfont.drawString(room->getName(), 10, 50);
     for (auto &value: room->getRoomDoors()) {
         drawDoor(value.second);
     }
