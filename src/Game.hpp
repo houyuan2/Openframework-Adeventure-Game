@@ -15,13 +15,29 @@
 #include "json.hpp"
 #include  <string>
 
-struct Room {
+class Room {
+private:
     std::string name;
     std::vector<std::string> room_monsters;
     std::map<std::string, Weapon> room_weapons;
     std::map<std::string, Shield> room_shields;
     Apple room_apple;
     std::map<std::string, Door> doors;
+    
+    friend void from_json(const nlohmann::json& j, Room& room);
+public:
+    std::string getName() {return name;};
+    std::vector<std::string> getRoomMonsters() {return room_monsters;};
+    std::map<std::string, Weapon> getRoomWeapons() {return room_weapons;};
+    std::map<std::string, Shield> getRoomShields() {return room_shields;};
+    Apple getRoomApple() {return room_apple;};
+    std::map<std::string, Door> getRoomDoors() {return doors;};
+    
+    void addRoomWeapon(Weapon weapon) {room_weapons[weapon.getName()] = weapon;};
+    void addRoomShield(Shield shield) {room_shields[shield.getName()] = shield;};
+    
+    void removeRoomWeapon(Weapon weapon) {room_weapons.erase(weapon.getName());};
+    void removeRoomShield(Shield shield) {room_shields.erase(shield.getName());};
 };
 
 class Game {
@@ -34,9 +50,9 @@ private:
     friend void from_json(const nlohmann::json& j, Game& game_room);
 
 public:
-    std::map<std::string, Room> &getRooms();
+    std::map<std::string, Room> getRooms();
 
-    std::map<std::string, Monster> &getMonsters();
+    std::map<std::string, Monster> getMonsters();
 
     const std::string &getStart_room() const;
 

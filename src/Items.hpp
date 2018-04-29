@@ -70,11 +70,14 @@ class Apple {
 private:
     int position_x = -1;
     int position_y = -1;
+    bool isConsumed = false;
     
     friend void from_json(const nlohmann::json& j, Apple& apple);
 public:
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
+    void comsume() {isConsumed = true;};
+    bool getState() {return isConsumed;};
 };
 
 class Door {

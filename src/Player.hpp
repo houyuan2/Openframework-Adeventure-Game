@@ -14,8 +14,8 @@
 
 struct Player {
     ofImage character;
-    int character_X = ofGetWindowWidth()/2;
-    int character_Y = ofGetWindowHeight()/2;
+    int character_X = 10;
+    int character_Y = 10;
     Weapon player_weapon;
     Shield player_shield;
     int player_max_health = 100;
