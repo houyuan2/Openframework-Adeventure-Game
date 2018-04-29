@@ -10,6 +10,7 @@
 #include "Items.hpp"
 #include "Game.hpp"
 #include "Player.hpp"
+#include "ofxDatGui.h"
 
 enum GameState {
     IN_PROGRESS = 0,
@@ -38,6 +39,7 @@ public:
     Game myGame;
     Player myPlayer;
     Room* current_room;
+    Monster* target;
     
 	// Function used for one time setup
 	void setup();
@@ -49,15 +51,25 @@ public:
 	// Event driven functions, called on appropriate user action
 	void keyPressed(int key);
     
-    //private helper functions
+    //map image functions
     void drawRoom(Room* room);
     void drawMonster(Monster monster);
     void drawDoor(Door door);
     void drawWeapon(Weapon weapon);
     void drawShield(Shield shield);
     void drawApple(Apple apple);
-    
     void drawPlayer();
+    
+    //duel image functions
+    void drawDuelMode(Monster* target);
+    void drawDuelPlayer();
+    void drawDuelMonster(Monster *target);
+    
+    //button
+    ofxDatGuiButton* attack_button;
+    ofxDatGuiButton* exit_button;
+    void positionButtons();
+    void onButtonEvent(ofxDatGuiButtonEvent e);
     
     //determine collision
     void mapEventTrigger();
@@ -72,7 +84,8 @@ public:
     void changeShield(Shield shield_to_change);
     
     //duel functions
-    void duel(Monster monster);
-    void attack(Monster monster);
-    void defense(Monster monster);
+    void duel(Monster* monster);
+    void attack(Monster* monster);
+    void defense(Monster* monster);
+    void exitDuel();
 };

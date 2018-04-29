@@ -59,6 +59,13 @@ void adventureGame::setup(){
     //font loading
     myfont.load("../../../data/arial.ttf", 50);
     
+    //button set up
+    attack_button = new ofxDatGuiButton("ATTACK");
+    exit_button = new ofxDatGuiButton("EXIT");
+    positionButtons();
+    attack_button->onButtonEvent(this, &adventureGame::onButtonEvent);
+    exit_button->onButtonEvent(this, &adventureGame::onButtonEvent);
+    
     //object set up
     std::ifstream i("../../../data/final_adventure.json");
     nlohmann::json j;
@@ -68,12 +75,27 @@ void adventureGame::setup(){
 }
 
 void adventureGame::draw() {
-    drawRoom(current_room);
-    drawPlayer();
+    if (current_state == IN_PROGRESS) {
+        drawRoom(current_room);
+        drawPlayer();
+    }
+    
+    if (current_state == DUEL) {
+        drawDuelMode(target);
+        attack_button->draw();
+        exit_button->draw();
+    }
 }
 
 void adventureGame::update() {
-    mapEventTrigger();
+    if (current_state == IN_PROGRESS) {
+        mapEventTrigger();
+    }
+    
+    if (current_state == DUEL) {
+        attack_button->update();
+        exit_button->update();
+    }
 }
 
 void adventureGame::keyPressed(int key) {
@@ -117,7 +139,7 @@ void adventureGame::keyPressed(int key) {
     }
 }
 
-//draw functions
+//map image functions
 void adventureGame::drawRoom(Room* room) {
     background.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
     myfont.drawString(room->getName(), 10, 50);
@@ -127,7 +149,7 @@ void adventureGame::drawRoom(Room* room) {
     
     for (auto monster_name: room->getRoomMonsters()) {
         Monster &monster_to_draw = myGame.getMonsters().at(monster_name);
-        if (!monster_to_draw.getState()) { //if monster is still alive
+        if (!monster_to_draw.isKilled()) { //if monster is still alive
             drawMonster(monster_to_draw);
         }
     }
@@ -147,9 +169,11 @@ void adventureGame::drawRoom(Room* room) {
 }
 
 void adventureGame::drawMonster(Monster monster) {
-    if (monster.getName() == "") {
+    if (monster.getName() == "" || monster.isKilled()) {
         return;
-    } monster_pics.at(monster.getName()).draw(monster.getPositionX(),monster.getPositionY(),100 ,100);
+    }
+    
+    monster_pics.at(monster.getName()).draw(monster.getPositionX(),monster.getPositionY(),100 ,100);
 }
 
 void adventureGame::drawDoor(Door door) {
@@ -174,12 +198,47 @@ void adventureGame::drawApple(Apple apple) {
 }
 
 void adventureGame::drawPlayer() {
-    character.draw(myPlayer.getPlayerPosX(),myPlayer.getPlayerPosY(), 100, 100);
+    character.draw(myPlayer.getPlayerPosX() - 50, myPlayer.getPlayerPosY() - 50, 100, 100);
+}
+
+//duel image functions
+void adventureGame::drawDuelMode(Monster *target) {
+    drawDuelPlayer();
+    drawDuelMonster(target);
+}
+
+void adventureGame::drawDuelPlayer() {
+    character.draw(0, 430, ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+}
+void adventureGame::drawDuelMonster(Monster *target) {
+    monster_pics.at(target->getName()).draw(700,0,ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+}
+
+//button
+void adventureGame::positionButtons() {
+    attack_button->setPosition(900, 700);
+    exit_button->setPosition(900, 800);
+}
+void adventureGame::onButtonEvent(ofxDatGuiButtonEvent e) {
+    if (e.target == attack_button) {
+        duel(target);
+    }
+    
+    if (e.target == exit_button) {
+        exitDuel();
+    }
 }
 
 //game logic
 void adventureGame::mapEventTrigger() {
     Door* door = meetDoor();
+    Monster* monster = meetMonster();
+    
+    if (monster != nullptr) {
+        target = monster;
+        current_state = DUEL;
+        return;
+    }
     
     if (door != nullptr && door->getName() != "") {
         current_room = &myGame.getRooms().at(door->getNextRoom());
@@ -209,14 +268,14 @@ void adventureGame::changeShield(Shield shield_to_change) {
 Monster* adventureGame::meetMonster() {
     for (auto &monster_name: current_room->getRoomMonsters()) {
         Monster* monster = &myGame.getMonsters().at(monster_name);
-        
-        if (!monster->getState()) { //if monster is still alive
+
+        if (!monster->isKilled()) { //if monster is still alive
             if (myPlayer.getPlayerPosX() >= monster->getPositionX() && myPlayer.getPlayerPosX() <= monster->getPositionX() + 100 && myPlayer.getPlayerPosY() >= monster->getPositionY() && myPlayer.getPlayerPosY() <= monster->getPositionY() + 100) {
                 return monster;
             }
         }
     }
-    
+
     return nullptr;
 }
 
@@ -281,25 +340,33 @@ void adventureGame::meetApple() {
     }
 }
 
-void adventureGame::duel(Monster monster) {
+//duel mode functions
+void adventureGame::duel(Monster* monster) {
     attack(monster);
     defense(monster);
 }
 
-void adventureGame::attack(Monster monster) {
-    int damage = myPlayer.getWeapon().getAttackValue() - monster.getDefenceNum();
+void adventureGame::attack(Monster* monster) {
+    int damage = myPlayer.getWeapon().getAttackValue() - monster->getDefenceNum();
     
     if (damage > 0) {
-        monster.setAcutalHealth(monster.getActualHealth() - damage);
+        monster->setAcutalHealth(monster->getActualHealth() - damage);
     }
     
-    if (monster.getActualHealth() <= 0) {
-        monster.killed();
+    if (monster->getActualHealth() <= 0) {
+        monster->killed();
+        myPlayer.setPlayerPosX(ofGetWindowWidth()/2);
+        myPlayer.setPlayerPosY(ofGetWindowHeight()/2);
+        current_state = IN_PROGRESS;
     }
     
 }
-void adventureGame::defense(Monster monster) {
-    int damage = monster.getAttackNum() - myPlayer.getShield().getDefense_value();
+void adventureGame::defense(Monster* monster) {
+    if (monster->isKilled()) {
+        return;
+    }
+    
+    int damage = monster->getAttackNum() - myPlayer.getShield().getDefense_value();
     
     if (damage > 0) {
         myPlayer.setActualHealth(myPlayer.getAcutualHealth() - damage);
@@ -308,4 +375,10 @@ void adventureGame::defense(Monster monster) {
     if (myPlayer.getAcutualHealth() <= 0) {
         current_state = LOST;
     }
+}
+
+void adventureGame::exitDuel() {
+    myPlayer.setPlayerPosX(ofGetWindowWidth()/2);
+    myPlayer.setPlayerPosY(ofGetWindowHeight()/2);
+    current_state = IN_PROGRESS;
 }

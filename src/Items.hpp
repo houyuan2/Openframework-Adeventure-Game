@@ -33,7 +33,7 @@ public:
     int getMaxHealth() {return max_health;};
     int getActualHealth() {return actual_health;};
     void setAcutalHealth(int value) {actual_health = value;};
-    bool getState() {return is_dead;};
+    bool isKilled() {return is_dead;};
     void killed() {is_dead = true;};
 };
 
