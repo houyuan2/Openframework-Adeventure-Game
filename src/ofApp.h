@@ -27,6 +27,7 @@ private:
     ofImage door_pic;
     ofImage apple_pic;
     ofImage character;
+    ofImage background;
     
     GameState current_state = IN_PROGRESS;
     

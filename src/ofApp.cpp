@@ -10,6 +10,7 @@ void adventureGame::setup(){
     character.load("images/character.png");
     door_pic.load("images/door.jpg");
     apple_pic.load("images/apple.jpg");
+    background.load("images/background.jpg");
     
     ofImage knife;
     knife.load("images/knife.jpg");
@@ -64,8 +65,8 @@ void adventureGame::setup(){
 }
 
 void adventureGame::draw() {
-    drawPlayer();
     drawRoom(current_room);
+    drawPlayer();
 }
 
 void adventureGame::update() {
@@ -96,10 +97,26 @@ void adventureGame::keyPressed(int key) {
     if (upper_key == 'W') {
         myPlayer.move_character_Y(-speed);
     }
+    
+    if (upper_key == 'F') {
+        Weapon* weapon = meetWeapon();
+        Shield* shield = meetShield();
+        
+        if (weapon != nullptr && weapon->getName() != "") {
+            Weapon temp_weapon = *weapon;
+            changeWeapon(temp_weapon);
+        }
+        
+        if (shield != nullptr && shield->getName() != "") {
+            Shield temp_shield = *shield;
+            changeShield(temp_shield);
+        }
+    }
 }
 
 //draw functions
 void adventureGame::drawRoom(Room* room) {
+    background.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
     for (auto &value: room->getRoomDoors()) {
         drawDoor(value.second);
     }
@@ -159,9 +176,6 @@ void adventureGame::drawPlayer() {
 //game logic
 void adventureGame::mapEventTrigger() {
     Door* door = meetDoor();
-    Weapon* weapon = meetWeapon();
-    Shield* shield = meetShield();
-    
     
     if (door != nullptr && door->getName() != "") {
         current_room = &myGame.getRooms().at(door->getNextRoom());
@@ -169,32 +183,22 @@ void adventureGame::mapEventTrigger() {
         myPlayer.setPlayerPosY(ofGetWindowHeight() - door->getPositionY());
     }
     
-    if (weapon != nullptr && weapon->getName() != "") {
-        Weapon temp_weapon = *weapon;
-        changeWeapon(temp_weapon);
-    }
-    
-    if (shield != nullptr && shield->getName() != "") {
-        Shield temp_shield = *shield;
-        changeShield(temp_shield);
-    }
-    
     meetApple();
 }
 
 void adventureGame::changeWeapon(Weapon weapon_to_change) {
     current_room->removeRoomWeapon(weapon_to_change);
-//    if (myPlayer.getWeapon().getName() != "") {
-//        current_room.addRoomWeapon(myPlayer.getWeapon());
-//    }
+    if (myPlayer.getWeapon().getName() != "") {
+        current_room->addRoomWeapon(myPlayer.getWeapon());
+    }
     myPlayer.addWeapon(weapon_to_change);
 }
 
 void adventureGame::changeShield(Shield shield_to_change) {
     current_room->removeRoomShield(shield_to_change);
-//    if (myPlayer.getShield().getName() != "") {
-//        current_room.addRoomShield(myPlayer.getShield());
-//    }
+    if (myPlayer.getShield().getName() != "") {
+        current_room->addRoomShield(myPlayer.getShield());
+    }
     myPlayer.addShield(shield_to_change);
 }
 

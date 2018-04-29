@@ -46,7 +46,7 @@ private:
     
     friend void from_json(const nlohmann::json& j, Weapon& weapon);
 public:
-    //Weapon() {name = ""; position_x = -1; position_y = -1; attack_value = -1;};
+    Weapon() {name = ""; position_x = -1; position_y = -1; attack_value = -1;};
     std::string getName() {return name;};
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
@@ -62,7 +62,7 @@ private:
     
     friend void from_json(const nlohmann::json& j, Shield& shield);
 public:
-    //Shield() {name = "", position_x = -1; position_y = -1, defence_value = -1;};
+    Shield() {name = "", position_x = -1; position_y = -1, defence_value = -1;};
     std::string getName() {return name;};
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
