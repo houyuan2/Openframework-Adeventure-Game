@@ -25,6 +25,7 @@ private:
     std::map<std::string, ofImage> shield_pics;
     ofImage door_pic;
     ofImage apple_pic;
+    ofImage character;
     
 public:
     Game myGame;

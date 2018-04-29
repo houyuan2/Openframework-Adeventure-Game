@@ -76,7 +76,7 @@ private:
 public:
     int getPositionX() {return position_x;};
     int getPositionY() {return position_y;};
-    void comsume() {isConsumed = true;};
+    void consume() {isConsumed = true;};
     bool getState() {return isConsumed;};
 };
 

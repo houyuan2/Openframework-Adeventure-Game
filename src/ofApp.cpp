@@ -7,7 +7,7 @@ void adventureGame::setup(){
 	srand(static_cast<unsigned>(time(0)));
     
     //image loading
-    myPlayer.character.load("images/character.png");
+    character.load("images/character.png");
     door_pic.load("images/door.jpg");
     apple_pic.load("images/apple.jpg");
     
@@ -99,15 +99,15 @@ void adventureGame::keyPressed(int key) {
 
 //draw functions
 void adventureGame::drawRoom(Room room) {
+    for (auto value: room.getRoomDoors()) {
+        drawDoor(value.second);
+    }
+    
     for (auto monster_name: room.getRoomMonsters()) {
         Monster &monster_to_draw = myGame.getMonsters().at(monster_name);
         if (!monster_to_draw.getState()) { //if monster is still alive
             drawMonster(monster_to_draw);
         }
-    }
-    
-    for (auto value: room.getRoomDoors()) {
-        drawDoor(value.second);
     }
     
     for (auto value: room.getRoomWeapons()) {
@@ -118,7 +118,6 @@ void adventureGame::drawRoom(Room room) {
         drawShield(value.second);
     }
     
-    Apple empty;
     if (room.getRoomApple().getPositionX() != -1 && !room.getRoomApple().getState()) {
         drawApple(room.getRoomApple());
     }
@@ -152,7 +151,7 @@ void adventureGame::drawApple(Apple apple) {
 }
 
 void adventureGame::drawPlayer() {
-    myPlayer.character.draw(myPlayer.character_X,myPlayer.character_Y, 100, 100);
+    character.draw(myPlayer.getPlayerPosX(),myPlayer.getPlayerPosY(), 100, 100);
 }
 
 //game logic
@@ -177,12 +176,12 @@ void adventureGame::mapEventTrigger() {
 
 void adventureGame::changeWeapon(Weapon weapon_to_change) {
     current_room.removeRoomWeapon(weapon_to_change);
-    myPlayer.player_weapon = weapon_to_change;
+    myPlayer.addWeapon(weapon_to_change);
 }
 
 void adventureGame::changeShield(Shield shield_to_change) {
     current_room.removeRoomShield(shield_to_change);
-    myPlayer.player_shield = shield_to_change;
+    myPlayer.addShield(shield_to_change);
 }
 
 Monster* adventureGame::meetMonster() {
@@ -190,7 +189,7 @@ Monster* adventureGame::meetMonster() {
         Monster* monster = &myGame.getMonsters().at(monster_name);
         
         if (!monster->getState()) { //if monster is still alive
-            if (myPlayer.character_X >= monster->getPositionX() && myPlayer.character_X <= monster->getPositionX() + 100 && myPlayer.character_Y >= monster->getPositionY() && myPlayer.character_Y <= monster->getPositionY() + 100) {
+            if (myPlayer.getPlayerPosX() >= monster->getPositionX() && myPlayer.getPlayerPosX() <= monster->getPositionX() + 100 && myPlayer.getPlayerPosY() >= monster->getPositionY() && myPlayer.getPlayerPosY() <= monster->getPositionY() + 100) {
                 return monster;
             }
         }
@@ -203,10 +202,10 @@ Door* adventureGame::meetDoor() {
     for (auto value: current_room.getRoomDoors()) {
         Door* door = &value.second;
         
-        if (myPlayer.character_X >= door->getPositionX() &&
-            myPlayer.character_X <= door->getPositionX() + 100 &&
-            myPlayer.character_Y >= door->getPositionY() &&
-            myPlayer.character_Y <= door->getPositionY() + 100) {
+        if (myPlayer.getPlayerPosX() >= door->getPositionX() &&
+            myPlayer.getPlayerPosX() <= door->getPositionX() + 100 &&
+            myPlayer.getPlayerPosY() >= door->getPositionY() &&
+            myPlayer.getPlayerPosY() <= door->getPositionY() + 100) {
             return door;
         }
     }
@@ -218,10 +217,10 @@ Weapon* adventureGame::meetWeapon() {
     for (auto value: current_room.getRoomWeapons()) {
         Weapon* weapon = &value.second;
         
-        if (myPlayer.character_X >= weapon->getPositionX() &&
-            myPlayer.character_X <= weapon->getPositionX() + 100 &&
-            myPlayer.character_Y >= weapon->getPositionY() &&
-            myPlayer.character_Y <= weapon->getPositionY() + 100) {
+        if (myPlayer.getPlayerPosX() >= weapon->getPositionX() &&
+            myPlayer.getPlayerPosX() <= weapon->getPositionX() + 100 &&
+            myPlayer.getPlayerPosY() >= weapon->getPositionY() &&
+            myPlayer.getPlayerPosY() <= weapon->getPositionY() + 100) {
             return weapon;
         }
     }
@@ -233,10 +232,10 @@ Shield* adventureGame::meetShield() {
     for (auto value: current_room.getRoomShields()) {
         Shield* shield = &value.second;
         
-        if (myPlayer.character_X >= shield->getPositionX() &&
-            myPlayer.character_X <= shield->getPositionX() + 100 &&
-            myPlayer.character_Y >= shield->getPositionY() &&
-            myPlayer.character_Y <= shield->getPositionY() + 100) {
+        if (myPlayer.getPlayerPosX() >= shield->getPositionX() &&
+            myPlayer.getPlayerPosX() <= shield->getPositionX() + 100 &&
+            myPlayer.getPlayerPosY() >= shield->getPositionY() &&
+            myPlayer.getPlayerPosY() <= shield->getPositionY() + 100) {
             return shield;
         }
     }
@@ -249,14 +248,14 @@ void adventureGame::meetApple() {
         return;
     }
     
-    if (myPlayer.character_X >= current_room.getRoomApple().getPositionX() &&
-        myPlayer.character_X <= current_room.getRoomApple().getPositionX() + 100 &&
-        myPlayer.character_Y >= current_room.getRoomApple().getPositionY() &&
-        myPlayer.character_Y <= current_room.getRoomApple().getPositionY() + 100) {
+    if (myPlayer.getPlayerPosX() >= current_room.getRoomApple().getPositionX() &&
+        myPlayer.getPlayerPosX() <= current_room.getRoomApple().getPositionX() + 100 &&
+        myPlayer.getPlayerPosY() >= current_room.getRoomApple().getPositionY() &&
+        myPlayer.getPlayerPosY() <= current_room.getRoomApple().getPositionY() + 100) {
         
 //reset the health
-        myPlayer.player_actual_health = myPlayer.player_max_health;
-        current_room.getRoomApple().comsume();
+        myPlayer.setActualHealth(myPlayer.getMaxHealth());
+        current_room.getRoomApple().consume();
     }
 }
 
