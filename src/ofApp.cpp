@@ -57,7 +57,8 @@ void adventureGame::setup(){
     monster_pics["Voldemort"] = voldemort;
     
     //font loading
-    myfont.load("../../../data/arial.ttf", 50);
+    room_name_font.load("../../../data/arial.ttf", 50);
+    health_name_font.load("../../../data/arial.ttf", 25);
     
     //button set up
     attack_button = new ofxDatGuiButton("ATTACK");
@@ -81,7 +82,7 @@ void adventureGame::draw() {
     }
     
     if (current_state == DUEL) {
-        drawDuelMode(target);
+        drawDuelMode(target_monster);
         attack_button->draw();
         exit_button->draw();
     }
@@ -108,19 +109,19 @@ void adventureGame::keyPressed(int key) {
     int speed = 20;
     
     if (upper_key == 'A') {
-        myPlayer.move_character_X(-speed);
+        my_player.move_character_X(-speed);
     }
     
     if (upper_key == 'D') {
-        myPlayer.move_character_X(speed);
+        my_player.move_character_X(speed);
     }
     
     if (upper_key == 'S') {
-        myPlayer.move_character_Y(speed);
+        my_player.move_character_Y(speed);
     }
     
     if (upper_key == 'W') {
-        myPlayer.move_character_Y(-speed);
+        my_player.move_character_Y(-speed);
     }
     
     if (upper_key == 'F') {
@@ -142,7 +143,7 @@ void adventureGame::keyPressed(int key) {
 //map image functions
 void adventureGame::drawRoom(Room* room) {
     background.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
-    myfont.drawString(room->getName(), 10, 50);
+    room_name_font.drawString(room->getName(), 10, 50);
     for (auto &value: room->getRoomDoors()) {
         drawDoor(value.second);
     }
@@ -198,20 +199,47 @@ void adventureGame::drawApple(Apple apple) {
 }
 
 void adventureGame::drawPlayer() {
-    character.draw(myPlayer.getPlayerPosX() - 50, myPlayer.getPlayerPosY() - 50, 100, 100);
+    character.draw(my_player.getPlayerPosX(), my_player.getPlayerPosY(), 100, 100);
 }
 
 //duel image functions
 void adventureGame::drawDuelMode(Monster *target) {
+    displayHealth();
     drawDuelPlayer();
     drawDuelMonster(target);
+    ofSetColor(0, 0, 0);
+    room_name_font.drawString("DUEL!", ofGetWindowWidth()/2 - 130, 100);
+    ofSetColor(255, 255, 255);
+
 }
 
 void adventureGame::drawDuelPlayer() {
     character.draw(0, 430, ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 }
+
 void adventureGame::drawDuelMonster(Monster *target) {
     monster_pics.at(target->getName()).draw(700,0,ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+}
+
+void adventureGame::displayHealth() {
+    double monster_health_percent = target_monster->getActualHealth() / (double)target_monster->getMaxHealth();
+    double player_health_percent = my_player.getAcutualHealth() / (double)my_player.getMaxHealth();
+    
+     ofSetColor(0, 0, 0);
+    health_name_font.drawString("Player: ", 50, 190);
+    health_name_font.drawString(target_monster->getName() + ": ", 50, 270);
+    
+    drawHealthBar(player_health_percent, 250, 170);
+    drawHealthBar(monster_health_percent, 250, 240);
+    ofSetColor(255, 255, 255);
+    
+}
+
+void adventureGame::drawHealthBar(double percent, int pos_x, int pos_y) {
+    ofSetColor(129, 131, 135);
+    ofDrawRectangle(pos_x,pos_y,300,50);
+    ofSetColor(51, 224, 24);
+    ofDrawRectangle(pos_x,pos_y,300 * percent,50);
 }
 
 //button
@@ -221,7 +249,7 @@ void adventureGame::positionButtons() {
 }
 void adventureGame::onButtonEvent(ofxDatGuiButtonEvent e) {
     if (e.target == attack_button) {
-        duel(target);
+        duel(target_monster);
     }
     
     if (e.target == exit_button) {
@@ -235,15 +263,15 @@ void adventureGame::mapEventTrigger() {
     Monster* monster = meetMonster();
     
     if (monster != nullptr) {
-        target = monster;
+        target_monster = monster;
         current_state = DUEL;
         return;
     }
     
     if (door != nullptr && door->getName() != "") {
         current_room = &myGame.getRooms().at(door->getNextRoom());
-        myPlayer.setPlayerPosX(ofGetWindowWidth() - door->getPositionX());
-        myPlayer.setPlayerPosY(ofGetWindowHeight() - door->getPositionY());
+        my_player.setPlayerPosX(ofGetWindowWidth() - door->getPositionX());
+        my_player.setPlayerPosY(ofGetWindowHeight() - door->getPositionY());
     }
     
     meetApple();
@@ -251,42 +279,84 @@ void adventureGame::mapEventTrigger() {
 
 void adventureGame::changeWeapon(Weapon weapon_to_change) {
     current_room->removeRoomWeapon(weapon_to_change);
-    if (myPlayer.getWeapon().getName() != "") {
-        current_room->addRoomWeapon(myPlayer.getWeapon());
+    if (my_player.getWeapon().getName() != "") {
+        current_room->addRoomWeapon(my_player.getWeapon());
     }
-    myPlayer.addWeapon(weapon_to_change);
+    my_player.addWeapon(weapon_to_change);
 }
 
 void adventureGame::changeShield(Shield shield_to_change) {
     current_room->removeRoomShield(shield_to_change);
-    if (myPlayer.getShield().getName() != "") {
-        current_room->addRoomShield(myPlayer.getShield());
+    if (my_player.getShield().getName() != "") {
+        current_room->addRoomShield(my_player.getShield());
     }
-    myPlayer.addShield(shield_to_change);
+    my_player.addShield(shield_to_change);
+}
+
+//Monster* adventureGame::meetMonster() {
+//    for (auto &monster_name: current_room->getRoomMonsters()) {
+//        Monster* monster = &myGame.getMonsters().at(monster_name);
+//
+//        if (!monster->isKilled()) { //if monster is still alive
+//            if (myPlayer.getPlayerPosX() >= monster->getPositionX() && myPlayer.getPlayerPosX() <= monster->getPositionX() + 100 && myPlayer.getPlayerPosY() >= monster->getPositionY() && myPlayer.getPlayerPosY() <= monster->getPositionY() + 100) {
+//                return monster;
+//            }
+//        }
+//    }
+//
+//    return nullptr;
+//}
+
+bool adventureGame::rectangleCollision(int x1, int y1, int w1, int h1,
+                        int x2, int y2, int w2, int h2) {
+    if (y1 + h1 < y2) {
+        return false;
+    }
+    
+    if (y2 + h2 < y1) {
+        return false;
+    }
+    
+    if (x1 + w1 < x2) {
+        return false;
+    }
+    
+    if (x2 + w2 < x1) {
+        return false;
+    }
+    return true;
 }
 
 Monster* adventureGame::meetMonster() {
     for (auto &monster_name: current_room->getRoomMonsters()) {
         Monster* monster = &myGame.getMonsters().at(monster_name);
-
-        if (!monster->isKilled()) { //if monster is still alive
-            if (myPlayer.getPlayerPosX() >= monster->getPositionX() && myPlayer.getPlayerPosX() <= monster->getPositionX() + 100 && myPlayer.getPlayerPosY() >= monster->getPositionY() && myPlayer.getPlayerPosY() <= monster->getPositionY() + 100) {
-                return monster;
-            }
+        
+        if (monster->isKilled()) { //if monster is still alive
+            return nullptr;
+        }
+        
+        int player_x = my_player.getPlayerPosX();
+        int player_y = my_player.getPlayerPosY();
+        int monster_x = monster->getPositionX();
+        int monster_y = monster->getPositionY();
+        
+        if (rectangleCollision(player_x, player_y, 100, 100, monster_x, monster_y ,100, 100)) {
+            return monster;
         }
     }
-
-    return nullptr;
+        return nullptr;
 }
 
 Door* adventureGame::meetDoor() {
     for (auto &value: current_room->getRoomDoors()) {
         Door* door = &(value.second);
         
-        if (myPlayer.getPlayerPosX() >= door->getPositionX() &&
-            myPlayer.getPlayerPosX() <= door->getPositionX() + 100 &&
-            myPlayer.getPlayerPosY() >= door->getPositionY() &&
-            myPlayer.getPlayerPosY() <= door->getPositionY() + 100) {
+        int player_x = my_player.getPlayerPosX();
+        int player_y = my_player.getPlayerPosY();
+        int door_x = door->getPositionX();
+        int door_y = door->getPositionY();
+        
+        if (rectangleCollision(player_x, player_y, 100, 100, door_x, door_y ,100, 100)) {
             return door;
         }
     }
@@ -298,10 +368,12 @@ Weapon* adventureGame::meetWeapon() {
     for (auto &value: current_room->getRoomWeapons()) {
         Weapon* weapon = &value.second;
         
-        if (myPlayer.getPlayerPosX() >= weapon->getPositionX() &&
-            myPlayer.getPlayerPosX() <= weapon->getPositionX() + 100 &&
-            myPlayer.getPlayerPosY() >= weapon->getPositionY() &&
-            myPlayer.getPlayerPosY() <= weapon->getPositionY() + 100) {
+        int player_x = my_player.getPlayerPosX();
+        int player_y = my_player.getPlayerPosY();
+        int weapon_x = weapon->getPositionX();
+        int weapon_y = weapon->getPositionY();
+        
+        if (rectangleCollision(player_x, player_y, 100, 100, weapon_x, weapon_y ,100, 100)) {
             return weapon;
         }
     }
@@ -313,10 +385,12 @@ Shield* adventureGame::meetShield() {
     for (auto &value: current_room->getRoomShields()) {
         Shield* shield = &value.second;
         
-        if (myPlayer.getPlayerPosX() >= shield->getPositionX() &&
-            myPlayer.getPlayerPosX() <= shield->getPositionX() + 100 &&
-            myPlayer.getPlayerPosY() >= shield->getPositionY() &&
-            myPlayer.getPlayerPosY() <= shield->getPositionY() + 100) {
+        int player_x = my_player.getPlayerPosX();
+        int player_y = my_player.getPlayerPosY();
+        int shield_x = shield->getPositionX();
+        int shield_y = shield->getPositionY();
+        
+        if (rectangleCollision(player_x, player_y, 100, 100, shield_x, shield_y ,100, 100)) {
             return shield;
         }
     }
@@ -330,12 +404,14 @@ void adventureGame::meetApple() {
         return;
     }
     
-    if (myPlayer.getPlayerPosX() >= current_room->getRoomApple().getPositionX() &&
-        myPlayer.getPlayerPosX() <= current_room->getRoomApple().getPositionX() + 100 &&
-        myPlayer.getPlayerPosY() >= current_room->getRoomApple().getPositionY() &&
-        myPlayer.getPlayerPosY() <= current_room->getRoomApple().getPositionY() + 100) {
-//reset the health
-        myPlayer.setActualHealth(myPlayer.getMaxHealth());
+    int player_x = my_player.getPlayerPosX();
+    int player_y = my_player.getPlayerPosY();
+    int apple_x = current_room->getRoomApple().getPositionX();
+    int apple_y = current_room->getRoomApple().getPositionY();
+    
+    if (rectangleCollision(player_x, player_y, 100, 100, apple_x, apple_y ,100, 100)) {
+        //reset the health
+        my_player.setActualHealth(my_player.getMaxHealth());
         current_room->getRoomApple().consume();
     }
 }
@@ -347,7 +423,7 @@ void adventureGame::duel(Monster* monster) {
 }
 
 void adventureGame::attack(Monster* monster) {
-    int damage = myPlayer.getWeapon().getAttackValue() - monster->getDefenceNum();
+    int damage = my_player.getWeapon().getAttackValue() - monster->getDefenceNum();
     
     if (damage > 0) {
         monster->setAcutalHealth(monster->getActualHealth() - damage);
@@ -355,8 +431,8 @@ void adventureGame::attack(Monster* monster) {
     
     if (monster->getActualHealth() <= 0) {
         monster->killed();
-        myPlayer.setPlayerPosX(ofGetWindowWidth()/2);
-        myPlayer.setPlayerPosY(ofGetWindowHeight()/2);
+        my_player.setPlayerPosX(ofGetWindowWidth()/2);
+        my_player.setPlayerPosY(ofGetWindowHeight()/2);
         current_state = IN_PROGRESS;
     }
     
@@ -366,19 +442,19 @@ void adventureGame::defense(Monster* monster) {
         return;
     }
     
-    int damage = monster->getAttackNum() - myPlayer.getShield().getDefense_value();
+    int damage = monster->getAttackNum() - my_player.getShield().getDefense_value();
     
     if (damage > 0) {
-        myPlayer.setActualHealth(myPlayer.getAcutualHealth() - damage);
+        my_player.setActualHealth(my_player.getAcutualHealth() - damage);
     }
     
-    if (myPlayer.getAcutualHealth() <= 0) {
+    if (my_player.getAcutualHealth() <= 0) {
         current_state = LOST;
     }
 }
 
 void adventureGame::exitDuel() {
-    myPlayer.setPlayerPosX(ofGetWindowWidth()/2);
-    myPlayer.setPlayerPosY(ofGetWindowHeight()/2);
+    my_player.setPlayerPosX(ofGetWindowWidth()/2);
+    my_player.setPlayerPosY(ofGetWindowHeight()/2);
     current_state = IN_PROGRESS;
 }

@@ -31,15 +31,16 @@ private:
     ofImage background;
     
     //font file
-    ofTrueTypeFont myfont;
+    ofTrueTypeFont room_name_font;
+    ofTrueTypeFont health_name_font;
     
     GameState current_state = IN_PROGRESS;
     
 public:
     Game myGame;
-    Player myPlayer;
+    Player my_player;
     Room* current_room;
-    Monster* target;
+    Monster* target_monster;
     
 	// Function used for one time setup
 	void setup();
@@ -64,6 +65,8 @@ public:
     void drawDuelMode(Monster* target);
     void drawDuelPlayer();
     void drawDuelMonster(Monster *target);
+    void displayHealth();
+    void drawHealthBar(double percent, int pos_x, int pos_y);
     
     //button
     ofxDatGuiButton* attack_button;
@@ -73,6 +76,9 @@ public:
     
     //determine collision
     void mapEventTrigger();
+    bool rectangleCollision(int x1, int y1, int w1, int h1,
+                            int x2, int y2, int w2, int h2);
+    
     Monster* meetMonster();
     Door* meetDoor();
     Weapon* meetWeapon();
