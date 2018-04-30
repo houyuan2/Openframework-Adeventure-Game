@@ -150,7 +150,7 @@
       "name": "Werewolf",
       "position_x": 590,
       "position_y": 10,
-      "attack_num": 30,
+      "attack_num": 25,
       "defence_num": 10,
       "max_health": 10,
       "actual_health": 10
@@ -160,7 +160,7 @@
       "position_x": 10,
       "position_y": 430,
       "attack_num": 40,
-      "defence_num": 20,
+      "defence_num": 16,
       "max_health": 20,
       "actual_health": 20
     },
@@ -168,8 +168,8 @@
       "name": "Zombie",
       "position_x": 600,
       "position_y": 0,
-      "attack_num": 60,
-      "defence_num": 60,
+      "attack_num": 55,
+      "defence_num": 30,
       "max_health": 100,
       "actual_health": 100
     },
@@ -177,8 +177,8 @@
       "name": "Ghost",
       "position_x": 1280,
       "position_y": 430,
-      "attack_num": 100,
-      "defence_num": 80,
+      "attack_num": 40,
+      "defence_num": 20,
       "max_health": 120,
       "actual_health": 120
     },

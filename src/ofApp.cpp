@@ -293,20 +293,6 @@ void adventureGame::changeShield(Shield shield_to_change) {
     my_player.addShield(shield_to_change);
 }
 
-//Monster* adventureGame::meetMonster() {
-//    for (auto &monster_name: current_room->getRoomMonsters()) {
-//        Monster* monster = &myGame.getMonsters().at(monster_name);
-//
-//        if (!monster->isKilled()) { //if monster is still alive
-//            if (myPlayer.getPlayerPosX() >= monster->getPositionX() && myPlayer.getPlayerPosX() <= monster->getPositionX() + 100 && myPlayer.getPlayerPosY() >= monster->getPositionY() && myPlayer.getPlayerPosY() <= monster->getPositionY() + 100) {
-//                return monster;
-//            }
-//        }
-//    }
-//
-//    return nullptr;
-//}
-
 bool adventureGame::rectangleCollision(int x1, int y1, int w1, int h1,
                         int x2, int y2, int w2, int h2) {
     if (y1 + h1 < y2) {
@@ -332,7 +318,7 @@ Monster* adventureGame::meetMonster() {
         Monster* monster = &myGame.getMonsters().at(monster_name);
         
         if (monster->isKilled()) { //if monster is still alive
-            return nullptr;
+            continue;
         }
         
         int player_x = my_player.getPlayerPosX();
@@ -433,6 +419,7 @@ void adventureGame::attack(Monster* monster) {
         monster->killed();
         my_player.setPlayerPosX(ofGetWindowWidth()/2);
         my_player.setPlayerPosY(ofGetWindowHeight()/2);
+        target_monster = nullptr;
         current_state = IN_PROGRESS;
     }
     
@@ -456,5 +443,6 @@ void adventureGame::defense(Monster* monster) {
 void adventureGame::exitDuel() {
     my_player.setPlayerPosX(ofGetWindowWidth()/2);
     my_player.setPlayerPosY(ofGetWindowHeight()/2);
+    target_monster = nullptr;
     current_state = IN_PROGRESS;
 }
