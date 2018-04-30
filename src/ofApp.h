@@ -33,6 +33,7 @@ private:
     //font file
     ofTrueTypeFont room_name_font;
     ofTrueTypeFont health_name_font;
+    ofTrueTypeFont game_end_font;
     
     GameState current_state = IN_PROGRESS;
     
@@ -68,11 +69,23 @@ public:
     void displayHealth();
     void drawHealthBar(double percent, int pos_x, int pos_y);
     
+    //game end image functions
+    void drawGameLost();
+    void drawGameWin();
+    
     //button
     ofxDatGuiButton* attack_button;
     ofxDatGuiButton* exit_button;
     void positionButtons();
     void onButtonEvent(ofxDatGuiButtonEvent e);
+    
+    //sound
+    ofSoundPlayer punch_sound;
+    ofSoundPlayer sword_sound;
+    ofSoundPlayer equip_sound;
+    ofSoundPlayer eat_sound;
+    ofSoundPlayer bgm;
+    ofSoundPlayer win_music;
     
     //determine collision
     void mapEventTrigger();

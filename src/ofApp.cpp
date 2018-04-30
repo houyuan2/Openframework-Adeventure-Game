@@ -59,6 +59,7 @@ void adventureGame::setup(){
     //font loading
     room_name_font.load("../../../data/arial.ttf", 50);
     health_name_font.load("../../../data/arial.ttf", 25);
+    game_end_font.load("../../../data/arial.ttf", 200);
     
     //button set up
     attack_button = new ofxDatGuiButton("ATTACK");
@@ -66,6 +67,16 @@ void adventureGame::setup(){
     positionButtons();
     attack_button->onButtonEvent(this, &adventureGame::onButtonEvent);
     exit_button->onButtonEvent(this, &adventureGame::onButtonEvent);
+    
+    //sound set up
+    punch_sound.load("../../../data/punch_sound.mp3");
+    sword_sound.load("../../../data/sword_sound.mp3");
+    equip_sound.load("../../../data/equip_sound.mp3");
+    eat_sound.load("../../../data/eat_sound.mp3");
+    win_music.load("../../../data/win_music.mp3");
+    bgm.load("../../../data/bgm.mp3");
+    bgm.setLoop(TRUE);
+    bgm.play();
     
     //object set up
     std::ifstream i("../../../data/final_adventure.json");
@@ -84,6 +95,14 @@ void adventureGame::draw() {
     if (current_state == DUEL) {
         drawDuelMode(target_monster);
     }
+    
+    if (current_state == LOST) {
+        drawGameLost();
+    }
+    
+    if (current_state == WIN) {
+        drawGameWin();
+    }
 }
 
 void adventureGame::update() {
@@ -95,6 +114,11 @@ void adventureGame::update() {
         attack_button->update();
         exit_button->update();
     }
+    
+//    Monster* final_monster = &myGame.getMonsters().at("Voldemort");
+//    if (final_monster->isKilled()) {
+//        current_state == WIN;
+//    }
 }
 
 void adventureGame::keyPressed(int key) {
@@ -244,6 +268,18 @@ void adventureGame::drawHealthBar(double percent, int pos_x, int pos_y) {
     ofDrawRectangle(pos_x,pos_y,300 * percent,50);
 }
 
+//game end image functions
+void adventureGame::drawGameLost() {
+    ofSetColor(232, 6, 6);
+    game_end_font.drawString("GAME \nOVER",ofGetWindowWidth()/4 , ofGetWindowHeight()/4 + 200);
+    ofSetColor(255, 255, 255);
+}
+void adventureGame::drawGameWin() {
+    ofSetColor(255,223,0);
+    game_end_font.drawString("YOU \n  WIN!",ofGetWindowWidth()/4 , ofGetWindowHeight()/4 + 200);
+    ofSetColor(255, 255, 255);
+}
+
 //button
 void adventureGame::positionButtons() {
     attack_button->setPosition(900, 600);
@@ -267,6 +303,7 @@ void adventureGame::mapEventTrigger() {
     if (monster != nullptr) {
         target_monster = monster;
         current_state = DUEL;
+        bgm.setPaused(TRUE);
         return;
     }
     
@@ -280,6 +317,8 @@ void adventureGame::mapEventTrigger() {
 }
 
 void adventureGame::changeWeapon(Weapon weapon_to_change) {
+    equip_sound.play();
+    
     current_room->removeRoomWeapon(weapon_to_change);
     if (my_player.getWeapon().getName() != "") {
         current_room->addRoomWeapon(my_player.getWeapon());
@@ -288,6 +327,8 @@ void adventureGame::changeWeapon(Weapon weapon_to_change) {
 }
 
 void adventureGame::changeShield(Shield shield_to_change) {
+    equip_sound.play();
+    
     current_room->removeRoomShield(shield_to_change);
     if (my_player.getShield().getName() != "") {
         current_room->addRoomShield(my_player.getShield());
@@ -399,6 +440,7 @@ void adventureGame::meetApple() {
     
     if (rectangleCollision(player_x, player_y, 100, 100, apple_x, apple_y ,100, 100)) {
         //reset the health
+        eat_sound.play();
         my_player.setActualHealth(my_player.getMaxHealth());
         current_room->getRoomApple().consume();
     }
@@ -411,6 +453,8 @@ void adventureGame::duel(Monster* monster) {
 }
 
 void adventureGame::attack(Monster* monster) {
+    sword_sound.play();
+    
     int damage = my_player.getWeapon().getAttackValue() - monster->getDefenceNum();
     
     if (damage > 0) {
@@ -421,12 +465,23 @@ void adventureGame::attack(Monster* monster) {
         monster->killed();
         my_player.setPlayerPosX(ofGetWindowWidth()/2);
         my_player.setPlayerPosY(ofGetWindowHeight()/2);
+        
+        if (target_monster->getName() == "Voldemort") {
+            current_state = WIN;
+            win_music.setLoop(TRUE);
+            win_music.play();
+            return;
+        }
+        
         target_monster = nullptr;
+        bgm.setPaused(FALSE);
         current_state = IN_PROGRESS;
     }
     
 }
 void adventureGame::defense(Monster* monster) {
+    punch_sound.play();
+    
     if (monster->isKilled()) {
         return;
     }
@@ -438,6 +493,7 @@ void adventureGame::defense(Monster* monster) {
     }
     
     if (my_player.getAcutualHealth() <= 0) {
+        bgm.setPaused(FALSE);
         current_state = LOST;
     }
 }
@@ -446,5 +502,6 @@ void adventureGame::exitDuel() {
     my_player.setPlayerPosX(ofGetWindowWidth()/2);
     my_player.setPlayerPosY(ofGetWindowHeight()/2);
     target_monster = nullptr;
+    bgm.setPaused(FALSE);
     current_state = IN_PROGRESS;
 }
