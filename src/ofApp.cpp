@@ -83,8 +83,6 @@ void adventureGame::draw() {
     
     if (current_state == DUEL) {
         drawDuelMode(target_monster);
-        attack_button->draw();
-        exit_button->draw();
     }
 }
 
@@ -210,7 +208,11 @@ void adventureGame::drawDuelMode(Monster *target) {
     ofSetColor(0, 0, 0);
     room_name_font.drawString("DUEL!", ofGetWindowWidth()/2 - 130, 100);
     ofSetColor(255, 255, 255);
-
+    
+    attack_button->setWidth(200);
+    exit_button->setWidth(200);
+    attack_button->draw();
+    exit_button->draw();
 }
 
 void adventureGame::drawDuelPlayer() {
@@ -244,7 +246,7 @@ void adventureGame::drawHealthBar(double percent, int pos_x, int pos_y) {
 
 //button
 void adventureGame::positionButtons() {
-    attack_button->setPosition(900, 700);
+    attack_button->setPosition(900, 600);
     exit_button->setPosition(900, 800);
 }
 void adventureGame::onButtonEvent(ofxDatGuiButtonEvent e) {
