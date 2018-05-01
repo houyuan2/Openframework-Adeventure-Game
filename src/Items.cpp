@@ -8,7 +8,10 @@
 #include <stdio.h>
 #include "Items.hpp"
 
-void from_json(const nlohmann::json& j, Monster& monster) {
+/*
+ * json serializer for monster
+ */
+void from_json(const nlohmann::json &j, Monster &monster) {
     monster.name = j.at("name").get<std::string>();
     monster.position_x = j.at("position_x").get<int>();
     monster.position_y = j.at("position_y").get<int>();
@@ -18,26 +21,38 @@ void from_json(const nlohmann::json& j, Monster& monster) {
     monster.actual_health = j.at("actual_health").get<int>();
 }
 
-void from_json(const nlohmann::json& j, Weapon& weapon) {
+/*
+ * json serializer for weapon
+ */
+void from_json(const nlohmann::json &j, Weapon &weapon) {
     weapon.name = j.at("name").get<std::string>();
     weapon.position_x = j.at("position_x").get<int>();
     weapon.position_y = j.at("position_y").get<int>();
     weapon.attack_value = j.at("attack_value").get<int>();
 }
 
-void from_json(const nlohmann::json& j, Shield& shield) {
+/*
+ * json serializer for shield
+ */
+void from_json(const nlohmann::json &j, Shield &shield) {
     shield.name = j.at("name").get<std::string>();
     shield.position_x = j.at("position_x").get<int>();
     shield.position_y = j.at("position_y").get<int>();
     shield.defence_value = j.at("defence_value").get<int>();
 }
 
-void from_json(const nlohmann::json& j, Apple& apple) {
+/*
+ * json serializer for apple
+ */
+void from_json(const nlohmann::json &j, Apple &apple) {
     apple.position_x = j.at("position_x").get<int>();
     apple.position_y = j.at("position_y").get<int>();
 }
 
-void from_json(const nlohmann::json& j, Door& door) {
+/*
+ * json serializer for door
+ */
+void from_json(const nlohmann::json &j, Door &door) {
     door.name = j.at("name").get<std::string>();
     door.position_x = j.at("position_x").get<int>();
     door.position_y = j.at("position_y").get<int>();

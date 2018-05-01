@@ -7,7 +7,10 @@
 
 #include "Game.hpp"
 
-void from_json(const nlohmann::json& j, Room& room) {
+/*
+ * json serializer for room
+ */
+void from_json(const nlohmann::json &j, Room &room) {
     room.name = j.at("name").get<std::string>();
     if (j.count("room_monsters") != 0) {
         room.room_monsters = j.at("room_monsters").get<std::vector<std::string>>();
@@ -24,18 +27,21 @@ void from_json(const nlohmann::json& j, Room& room) {
     room.doors = j.at("doors").get<std::map<std::string, Door>>();
 }
 
-void from_json(const nlohmann::json& j, Game& game) {
-    game.rooms = j.at("rooms").get<std::map<std::string,Room>>();
-    game.monsters = j.at("monsters").get<std::map<std::string,Monster>>();
+/*
+ * json serializer for game
+ */
+void from_json(const nlohmann::json &j, Game &game) {
+    game.rooms = j.at("rooms").get<std::map<std::string, Room>>();
+    game.monsters = j.at("monsters").get<std::map<std::string, Monster>>();
     game.start_room = j.at("start_room").get<std::string>();
     game.end_room = j.at("end_room").get<std::string>();
 }
 
-std::map<std::string, Room>& Game::getRooms() {
+std::map<std::string, Room> &Game::getRooms() {
     return rooms;
 }
 
-std::map<std::string, Monster>& Game::getMonsters() {
+std::map<std::string, Monster> &Game::getMonsters() {
     return monsters;
 }
 
