@@ -75,6 +75,7 @@ void adventureGame::setup(){
     eat_sound.load("../../../data/eat_sound.mp3");
     win_music.load("../../../data/win_music.mp3");
     bgm.load("../../../data/bgm.mp3");
+    bgm.setVolume(0.5);
     bgm.setLoop(TRUE);
     bgm.play();
     
@@ -115,10 +116,6 @@ void adventureGame::update() {
         exit_button->update();
     }
     
-//    Monster* final_monster = &myGame.getMonsters().at("Voldemort");
-//    if (final_monster->isKilled()) {
-//        current_state == WIN;
-//    }
 }
 
 void adventureGame::keyPressed(int key) {
@@ -428,7 +425,7 @@ Shield* adventureGame::meetShield() {
 }
 
 void adventureGame::meetApple() {
-    if (current_room->getRoomApple().getPositionX() == -1 &&
+    if (current_room->getRoomApple().getPositionX() == -1 ||
         current_room->getRoomApple().isConsumed()) {
         return;
     }
@@ -449,6 +446,7 @@ void adventureGame::meetApple() {
 //duel mode functions
 void adventureGame::duel(Monster* monster) {
     attack(monster);
+    while(sword_sound.isPlaying());
     defense(monster);
 }
 

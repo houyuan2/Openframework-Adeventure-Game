@@ -106,7 +106,7 @@
           "name": "laser_blade",
           "position_x": 640,
           "position_y": 480,
-          "attack_value": 500
+          "attack_value": 300
         }
       },
       "room_shields": {
@@ -114,7 +114,7 @@
           "name": "avalon",
           "position_x": 640,
           "position_y": 380,
-          "defence_value": 1000
+          "defence_value": 198
         }
       },
       "room_apple": {

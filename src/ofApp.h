@@ -101,6 +101,7 @@ public:
     //helper functions
     void changeWeapon(Weapon weapon_to_change);
     void changeShield(Shield shield_to_change);
+    bool eat_apple = false;
     
     //duel functions
     void duel(Monster* monster);
