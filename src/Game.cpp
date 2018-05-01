@@ -45,10 +45,10 @@ std::map<std::string, Monster> &Game::getMonsters() {
     return monsters;
 }
 
-const std::string &Game::getStart_room() const {
+const std::string &Game::getStartRoom() const {
     return start_room;
 }
 
-const std::string &Game::getEnd_room() const {
+const std::string &Game::getEndRoom() const {
     return end_room;
 }

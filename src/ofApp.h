@@ -39,7 +39,7 @@ private:
     GameState current_state = IN_PROGRESS;
 
 public:
-    Game myGame;
+    Game my_game;
     Player my_player;
     Room *current_room;
     Monster *target_monster;

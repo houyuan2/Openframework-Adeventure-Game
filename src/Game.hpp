@@ -62,9 +62,9 @@ public:
 
     std::map<std::string, Monster> &getMonsters();
 
-    const std::string &getStart_room() const;
+    const std::string &getStartRoom() const;
 
-    const std::string &getEnd_room() const;
+    const std::string &getEndRoom() const;
 };
 
 #endif /* GameRoom_hpp */

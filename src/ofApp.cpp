@@ -83,8 +83,8 @@ void adventureGame::setup() {
     std::ifstream i("../../../data/final_adventure.json");
     nlohmann::json j;
     i >> j;
-    myGame = j;
-    current_room = &myGame.getRooms().at(myGame.getStart_room());
+    my_game = j;
+    current_room = &my_game.getRooms().at(my_game.getStartRoom());
 }
 
 /*
@@ -137,19 +137,19 @@ void adventureGame::keyPressed(int key) {
     int speed = 20;
 
     if (upper_key == 'A') {
-        my_player.move_character_X(-speed);
+        my_player.moveCharacterPosX(-speed);
     }
 
     if (upper_key == 'D') {
-        my_player.move_character_X(speed);
+        my_player.moveCharacterPosX(speed);
     }
 
     if (upper_key == 'S') {
-        my_player.move_character_Y(speed);
+        my_player.moveCharacterPosY(speed);
     }
 
     if (upper_key == 'W') {
-        my_player.move_character_Y(-speed);
+        my_player.moveCharacterPosY(-speed);
     }
 
     if (upper_key == 'F') {
@@ -181,7 +181,7 @@ void adventureGame::drawRoom(Room *room) {
     }
 
     for (auto monster_name: room->getRoomMonsters()) {
-        Monster &monster_to_draw = myGame.getMonsters().at(monster_name);
+        Monster &monster_to_draw = my_game.getMonsters().at(monster_name);
         if (!monster_to_draw.isKilled()) { //if monster is still alive
             drawMonster(monster_to_draw);
         }
@@ -369,7 +369,7 @@ void adventureGame::mapEventTrigger() {
     }
 
     if (door != nullptr && door->getName() != "") {  //move to another room if collide with door
-        current_room = &myGame.getRooms().at(door->getNextRoom());
+        current_room = &my_game.getRooms().at(door->getNextRoom());
         my_player.setPlayerPosX(ofGetWindowWidth() - door->getPositionX());
         my_player.setPlayerPosY(ofGetWindowHeight() - door->getPositionY());
     }
@@ -431,7 +431,7 @@ bool adventureGame::rectangleCollision(int x1, int y1, int w1, int h1,
  */
 Monster *adventureGame::meetMonster() {
     for (auto &monster_name: current_room->getRoomMonsters()) {
-        Monster *monster = &myGame.getMonsters().at(monster_name);
+        Monster *monster = &my_game.getMonsters().at(monster_name);
 
         if (monster->isKilled()) { //if monster is still alive
             continue;
@@ -582,7 +582,7 @@ void adventureGame::defense(Monster *monster) {
         return;
     }
 
-    int damage = monster->getAttackNum() - my_player.getShield().getDefense_value();
+    int damage = monster->getAttackNum() - my_player.getShield().getDefenseValue();
 
     if (damage > 0) {
         my_player.setActualHealth(my_player.getAcutualHealth() - damage);

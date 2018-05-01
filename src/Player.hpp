@@ -14,25 +14,25 @@
 
 class Player {
 private:
-    int character_X = 10;
-    int character_Y = 800;
+    int character_x = 10;
+    int character_y = 800;
     Weapon player_weapon;
     Shield player_shield;
     int player_max_health = 100;
     int player_actual_health = 100;
 
 public:
-    int getPlayerPosX() { return character_X; };
+    int getPlayerPosX() { return character_x; };
 
-    int getPlayerPosY() { return character_Y; };
+    int getPlayerPosY() { return character_y; };
 
-    void setPlayerPosX(int posX) { character_X = posX; };
+    void setPlayerPosX(int posX) { character_x = posX; };
 
-    void setPlayerPosY(int posY) { character_Y = posY; };
+    void setPlayerPosY(int posY) { character_y = posY; };
 
-    void move_character_X(int value);
+    void moveCharacterPosX(int value);
 
-    void move_character_Y(int value);
+    void moveCharacterPosY(int value);
 
     void addWeapon(Weapon weapon) { player_weapon = weapon; };
 

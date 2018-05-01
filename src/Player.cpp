@@ -10,23 +10,23 @@
 /*
  * change the character's horizontal position, stop moving if the character is going out of the screen
  */
-void Player::move_character_X(int value) {
-    int new_pos = character_X + value;
+void Player::moveCharacterPosX(int value) {
+    int new_pos = character_x + value;
     if (new_pos > ofGetWindowWidth() || new_pos < 0) {
         return;
     }
-    character_X = new_pos;
+    character_x = new_pos;
     return;
 }
 
 /*
  * change the character's vertical position, stop moving if the character is going out of the screen
  */
-void Player::move_character_Y(int value) {
-    int new_pos = character_Y + value;
+void Player::moveCharacterPosY(int value) {
+    int new_pos = character_y + value;
     if (new_pos > ofGetWindowHeight() || new_pos < 0) {
         return;
     }
-    character_Y = new_pos;
+    character_y = new_pos;
     return;
 }

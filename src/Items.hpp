@@ -94,7 +94,7 @@ public:
 
     int getPositionY() { return position_y; };
 
-    int getDefense_value() { return defence_value; };
+    int getDefenseValue() { return defence_value; };
 };
 
 class Apple {
