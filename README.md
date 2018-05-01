@@ -1,5 +1,8 @@
 # CS 126 FinalProject
 
+include external library used
+include make files
+
 # Description
 a 2D adventure game, player could move around the map by pressing keys, pick up items and defeat monsters.
 If the player's health is less or equal to 0, the game is lost.
