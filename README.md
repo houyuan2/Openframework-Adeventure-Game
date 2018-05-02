@@ -16,6 +16,6 @@ This game uses 3 external library
 3. ofxDatGui: https://github.com/braitsch/ofxDatGui
 
 # Game Build
-The user need to set up openframework and import the ofxDatGui Library using the above the link.
-Download the game files and and import them using the openframework project generator
-Run the applicatuon and enjoy the game
+1. Set up openframework and import the ofxDatGui Library using the above the link.
+2. Download the game files and and import them using the openframework Project Generator
+3. Run the applicatuon and enjoy the game
