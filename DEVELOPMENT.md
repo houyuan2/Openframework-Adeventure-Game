@@ -17,6 +17,7 @@ change the Room class, make room_monsters a vector of string that contains the m
 
 # error when testing parser
 need to let the parser ignore objects that are not included in the json file, pending fix
+
 update: add an if statement to check whether the json object has the required field before parsing
 
 # error when moving from room to room
