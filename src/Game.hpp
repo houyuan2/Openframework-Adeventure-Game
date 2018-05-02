@@ -39,12 +39,16 @@ public:
 
     std::map<std::string, Door> &getRoomDoors() { return doors; };
 
+    //add a weapon to room
     void addRoomWeapon(Weapon weapon) { room_weapons[weapon.getName()] = weapon; };
 
+    //add a shield to room
     void addRoomShield(Shield shield) { room_shields[shield.getName()] = shield; };
 
+    //remove a weapon from room
     void removeRoomWeapon(Weapon weapon) { room_weapons.erase(weapon.getName()); };
 
+    //remove a shield from room
     void removeRoomShield(Shield shield) { room_shields.erase(shield.getName()); };
 };
 
