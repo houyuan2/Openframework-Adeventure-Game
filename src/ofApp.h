@@ -38,6 +38,66 @@ private:
     ofTrueTypeFont game_end_font;
 
     GameState current_state = IN_PROGRESS;
+    
+    //constant
+    const int kRoomNameSize = 50;
+    const int kHealthNameSize = 25;
+    const int kButtonNameSize = 20;
+    const int kGameEndFontSize = 200;
+    const float kVolume = 0.5;
+    const int kSpeed = 20;
+    
+    const int kRoomNamePosX = 10;
+    const int kRoomNamePosY = 50;
+    
+    const int kObjectImageSize = 100;
+    
+    const int kDuelNamePosX = ofGetWindowWidth() / 2 - 130;
+    const int kDuelnamePosY = 100;
+    
+    const int kButtonWidth = 200;
+    
+    const int kAttackNamePosX = 800;
+    const int kAttackNamePosY = 620;
+    
+    const int kExitNamePosX = 800;
+    const int kExitNamePosY = 770;
+    
+    const int kDuelPlayerPosX = 0;
+    const int kDuelPlayerPosY = 430;
+    
+    const int kDuelMonsterPosX = 700;
+    const int kDuelMonsterPosY = 0;
+    
+    const int kDuelImageSizeX = ofGetWindowWidth() / 2;
+    const int kDuelImageSizeY = ofGetWindowHeight() / 2;
+    
+    const int kPlayerHealthNamePosX = 50;
+    const int kPlayerHealthNamePosY = 190;
+    
+    const int kMonsterHealthNamePosX = 50;
+    const int kMonsterHealthNamePosY = 270;
+    
+    const int kPlayerHealthBarPosX = 250;
+    const int kPlayerHealthBarPosY = 170;
+    
+    const int kMonsterHealthBarPosX = 250;
+    const int kMonsterHealthBarPosY = 240;
+    
+    const int kHealthBarLength = 300;
+    const int kHealthBarWidth = 50;
+    
+    const int kGameEndPosX = ofGetWindowWidth() / 4;
+    const int kGameEndPosY = ofGetWindowHeight() / 4 + 200;
+    
+    const int kAttackButtonPosX = 900;
+    const int kAttackButtonPosY = 600;
+    
+    const int kExitButtonPosX = 900;
+    const int kExitButtonPosY = 750;
+    
+    const int kScreenMidPosX = ofGetWindowWidth() / 2;
+    const int kScreenMidPosY = ofGetWindowHeight() / 2;
 
 public:
     Game my_game;

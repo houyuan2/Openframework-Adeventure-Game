@@ -1,7 +1,7 @@
 {
   "rooms": {
     "gate": {
-      "name": "gate",
+      "name": "Gate",
       "room_monsters": [
         "Werewolf"
       ],
@@ -35,7 +35,7 @@
       }
     },
     "lobby": {
-      "name": "lobby",
+      "name": "Lobby",
       "room_monsters": [
         "Vampire",
         "Zombie",
@@ -69,7 +69,7 @@
       }
     },
     "left_wing": {
-      "name": "left_wing",
+      "name": "Left Wing",
       "room_weapons": {
         "sword": {
           "name": "sword",
@@ -100,7 +100,7 @@
       }
     },
     "right_wing": {
-      "name": "left_wing",
+      "name": "Right Wing",
       "room_weapons": {
         "laser_blade": {
           "name": "laser_blade",
@@ -131,7 +131,7 @@
       }
     },
     "final": {
-      "name": "final",
+      "name": "Final",
       "room_monsters": [
         "Voldemort"
       ],

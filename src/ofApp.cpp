@@ -57,10 +57,10 @@ void adventureGame::setup() {
     monster_pics["Voldemort"] = voldemort;
 
     //font loading
-    room_name_font.load("../../../data/arial.ttf", 50);
-    health_name_font.load("../../../data/arial.ttf", 25);
-    button_name_font.load("../../../data/arial.ttf", 20);
-    game_end_font.load("../../../data/arial.ttf", 200);
+    room_name_font.load("../../../data/arial.ttf", kRoomNameSize);
+    health_name_font.load("../../../data/arial.ttf", kHealthNameSize);
+    button_name_font.load("../../../data/arial.ttf", kButtonNameSize);
+    game_end_font.load("../../../data/arial.ttf", kGameEndFontSize);
 
     //button set up
     attack_button = new ofxDatGuiButton("ATTACK");
@@ -76,7 +76,7 @@ void adventureGame::setup() {
     eat_sound.load("../../../data/eat_sound.mp3");
     win_music.load("../../../data/win_music.mp3");
     bgm.load("../../../data/bgm.mp3");
-    bgm.setVolume(0.5);
+    bgm.setVolume(kVolume);
     bgm.setLoop(TRUE);
     bgm.play();
 
@@ -135,22 +135,21 @@ void adventureGame::keyPressed(int key) {
     }
 
     int upper_key = toupper(key); // Standardize on upper case
-    int speed = 20;
-
+    
     if (upper_key == 'A') {
-        my_player.moveCharacterPosX(-speed);
+        my_player.moveCharacterPosX(-kSpeed);
     }
 
     if (upper_key == 'D') {
-        my_player.moveCharacterPosX(speed);
+        my_player.moveCharacterPosX(kSpeed);
     }
 
     if (upper_key == 'S') {
-        my_player.moveCharacterPosY(speed);
+        my_player.moveCharacterPosY(kSpeed);
     }
 
     if (upper_key == 'W') {
-        my_player.moveCharacterPosY(-speed);
+        my_player.moveCharacterPosY(-kSpeed);
     }
 
     if (upper_key == 'F') {
@@ -176,7 +175,7 @@ void adventureGame::keyPressed(int key) {
  */
 void adventureGame::drawRoom(Room *room) {
     background.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
-    room_name_font.drawString(room->getName(), 10, 50);
+    room_name_font.drawString(room->getName(), kRoomNamePosX, kRoomNamePosY);
     for (auto &value: room->getRoomDoors()) {
         drawDoor(value.second);
     }
@@ -210,14 +209,14 @@ void adventureGame::drawMonster(Monster monster) {
         return;
     }
 
-    monster_pics.at(monster.getName()).draw(monster.getPositionX(), monster.getPositionY(), 100, 100);
+    monster_pics.at(monster.getName()).draw(monster.getPositionX(), monster.getPositionY(), kObjectImageSize, kObjectImageSize);
 }
 
 /*
  * draw a given door, image is retrieved from the door_pic map
  */
 void adventureGame::drawDoor(Door door) {
-    door_pic.draw(door.getPositionX(), door.getPositionY(), 100, 100);
+    door_pic.draw(door.getPositionX(), door.getPositionY(), kObjectImageSize, kObjectImageSize);
 }
 
 /*
@@ -227,7 +226,7 @@ void adventureGame::drawWeapon(Weapon weapon) {
     if (weapon.getName() == "") {
         return;
     }
-    weapon_pics.at(weapon.getName()).draw(weapon.getPositionX(), weapon.getPositionY(), 100, 100);
+    weapon_pics.at(weapon.getName()).draw(weapon.getPositionX(), weapon.getPositionY(), kObjectImageSize, kObjectImageSize);
 }
 
 /*
@@ -237,21 +236,21 @@ void adventureGame::drawShield(Shield shield) {
     if (shield.getName() == "") {
         return;
     }
-    shield_pics.at(shield.getName()).draw(shield.getPositionX(), shield.getPositionY(), 100, 100);
+    shield_pics.at(shield.getName()).draw(shield.getPositionX(), shield.getPositionY(), kObjectImageSize, kObjectImageSize);
 }
 
 /*
  * draw a given apple
  */
 void adventureGame::drawApple(Apple apple) {
-    apple_pic.draw(apple.getPositionX(), apple.getPositionY(), 100, 100);
+    apple_pic.draw(apple.getPositionX(), apple.getPositionY(), kObjectImageSize, kObjectImageSize);
 }
 
 /*
  * draw the in game player controlled character
  */
 void adventureGame::drawPlayer() {
-    character.draw(my_player.getPlayerPosX(), my_player.getPlayerPosY(), 100, 100);
+    character.draw(my_player.getPlayerPosX(), my_player.getPlayerPosY(), kObjectImageSize, kObjectImageSize);
 }
 
 //duel image functions
@@ -263,14 +262,15 @@ void adventureGame::drawDuelMode(Monster *target) {
     drawDuelPlayer();
     drawDuelMonster(target);
     ofSetColor(0, 0, 0);
-    room_name_font.drawString("DUEL!", ofGetWindowWidth() / 2 - 130, 100);
+    room_name_font.drawString("DUEL!",kDuelNamePosX , kDuelnamePosY);
+
     ofSetColor(255, 255, 255);
 
-    attack_button->setWidth(200);
-    exit_button->setWidth(200);
+    attack_button->setWidth(kButtonWidth);
+    exit_button->setWidth(kButtonWidth);
     
-    button_name_font.drawString("Attack: ", 800, 620);
-    button_name_font.drawString("Exit: ", 800, 770);
+    button_name_font.drawString("Attack: ", kAttackNamePosX, kAttackNamePosY);
+    button_name_font.drawString("Exit: ", kExitNamePosX, kExitNamePosY);
     
     attack_button->draw();
     exit_button->draw();
@@ -280,14 +280,14 @@ void adventureGame::drawDuelMode(Monster *target) {
  * draw the character
  */
 void adventureGame::drawDuelPlayer() {
-    character.draw(0, 430, ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
+    character.draw(kDuelPlayerPosX, kDuelPlayerPosY, kDuelImageSizeX, kDuelImageSizeY);
 }
 
 /*
  * draw the monster
  */
 void adventureGame::drawDuelMonster(Monster *target) {
-    monster_pics.at(target->getName()).draw(700, 0, ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
+    monster_pics.at(target->getName()).draw(kDuelMonsterPosX, kDuelMonsterPosY, kDuelImageSizeX, kDuelImageSizeY);
 }
 
 /*
@@ -298,13 +298,12 @@ void adventureGame::displayHealth() {
     double player_health_percent = my_player.getAcutualHealth() / (double) my_player.getMaxHealth();
 
     ofSetColor(0, 0, 0);
-    health_name_font.drawString("Player: ", 50, 190);
-    health_name_font.drawString(target_monster->getName() + ": ", 50, 270);
+    health_name_font.drawString("Player: ", kPlayerHealthNamePosX, kPlayerHealthNamePosY);
+    health_name_font.drawString(target_monster->getName() + ": ", kMonsterHealthNamePosX, kMonsterHealthNamePosY);
 
-    drawHealthBar(player_health_percent, 250, 170);
-    drawHealthBar(monster_health_percent, 250, 240);
+    drawHealthBar(player_health_percent, kPlayerHealthBarPosX, kPlayerHealthBarPosY);
+    drawHealthBar(monster_health_percent, kMonsterHealthBarPosX, kMonsterHealthBarPosY);
     ofSetColor(255, 255, 255);
-
 }
 
 /*
@@ -312,9 +311,9 @@ void adventureGame::displayHealth() {
  */
 void adventureGame::drawHealthBar(double percent, int pos_x, int pos_y) {
     ofSetColor(129, 131, 135);
-    ofDrawRectangle(pos_x, pos_y, 300, 50);
+    ofDrawRectangle(pos_x, pos_y, kHealthBarLength, kHealthBarWidth);
     ofSetColor(51, 224, 24);
-    ofDrawRectangle(pos_x, pos_y, 300 * percent, 50);
+    ofDrawRectangle(pos_x, pos_y, kHealthBarLength * percent, kHealthBarWidth);
 }
 
 //game end image functions
@@ -323,7 +322,7 @@ void adventureGame::drawHealthBar(double percent, int pos_x, int pos_y) {
  */
 void adventureGame::drawGameLost() {
     ofSetColor(232, 6, 6);
-    game_end_font.drawString("GAME \nOVER", ofGetWindowWidth() / 4, ofGetWindowHeight() / 4 + 200);
+    game_end_font.drawString("GAME \nOVER", kGameEndPosX, kGameEndPosY);
     ofSetColor(255, 255, 255);
 }
 
@@ -332,7 +331,7 @@ void adventureGame::drawGameLost() {
  */
 void adventureGame::drawGameWin() {
     ofSetColor(255, 223, 0);
-    game_end_font.drawString("YOU \n  WIN!", ofGetWindowWidth() / 4, ofGetWindowHeight() / 4 + 200);
+    game_end_font.drawString("YOU \n  WIN!", kGameEndPosX, kGameEndPosY);
     ofSetColor(255, 255, 255);
 }
 
@@ -341,8 +340,8 @@ void adventureGame::drawGameWin() {
  * place the button on the screen
  */
 void adventureGame::positionButtons() {
-    attack_button->setPosition(900, 600);
-    exit_button->setPosition(900, 750);
+    attack_button->setPosition(kAttackButtonPosX, kAttackButtonPosY);
+    exit_button->setPosition(kExitButtonPosX, kExitButtonPosY);
 }
 
 /*
@@ -447,7 +446,7 @@ Monster *adventureGame::meetMonster() {
         int monster_x = monster->getPositionX();
         int monster_y = monster->getPositionY();
 
-        if (rectangleCollision(player_x, player_y, 100, 100, monster_x, monster_y, 100, 100)) {
+        if (rectangleCollision(player_x, player_y, kObjectImageSize, kObjectImageSize, monster_x, monster_y, kObjectImageSize, kObjectImageSize)) {
             return monster;
         }
     }
@@ -466,7 +465,7 @@ Door *adventureGame::meetDoor() {
         int door_x = door->getPositionX();
         int door_y = door->getPositionY();
 
-        if (rectangleCollision(player_x, player_y, 100, 100, door_x, door_y, 100, 100)) {
+        if (rectangleCollision(player_x, player_y, kObjectImageSize, kObjectImageSize, door_x, door_y, kObjectImageSize, kObjectImageSize)) {
             return door;
         }
     }
@@ -486,7 +485,7 @@ Weapon *adventureGame::meetWeapon() {
         int weapon_x = weapon->getPositionX();
         int weapon_y = weapon->getPositionY();
 
-        if (rectangleCollision(player_x, player_y, 100, 100, weapon_x, weapon_y, 100, 100)) {
+        if (rectangleCollision(player_x, player_y, kObjectImageSize, kObjectImageSize, weapon_x, weapon_y, kObjectImageSize, kObjectImageSize)) {
             return weapon;
         }
     }
@@ -506,7 +505,7 @@ Shield *adventureGame::meetShield() {
         int shield_x = shield->getPositionX();
         int shield_y = shield->getPositionY();
 
-        if (rectangleCollision(player_x, player_y, 100, 100, shield_x, shield_y, 100, 100)) {
+        if (rectangleCollision(player_x, player_y, kObjectImageSize, kObjectImageSize, shield_x, shield_y, kObjectImageSize, kObjectImageSize)) {
             return shield;
         }
     }
@@ -528,7 +527,7 @@ void adventureGame::meetApple() {
     int apple_x = current_room->getRoomApple().getPositionX();
     int apple_y = current_room->getRoomApple().getPositionY();
 
-    if (rectangleCollision(player_x, player_y, 100, 100, apple_x, apple_y, 100, 100)) {
+    if (rectangleCollision(player_x, player_y, kObjectImageSize, kObjectImageSize, apple_x, apple_y, kObjectImageSize, kObjectImageSize)) {
         //reset the health
         eat_sound.play();
         my_player.setActualHealth(my_player.getMaxHealth());
@@ -542,7 +541,7 @@ void adventureGame::meetApple() {
  */
 void adventureGame::duel(Monster *monster) {
     attack(monster);
-    while (sword_sound.isPlaying());
+    while (sword_sound.isPlaying()); //halts the program until attack sound is finished
     defense(monster);
 }
 
@@ -560,10 +559,11 @@ void adventureGame::attack(Monster *monster) {
 
     if (monster->getActualHealth() <= 0) {
         monster->killed();
-        my_player.setPlayerPosX(ofGetWindowWidth() / 2);
-        my_player.setPlayerPosY(ofGetWindowHeight() / 2);
+        my_player.setPlayerPosX(kScreenMidPosX);
+        my_player.setPlayerPosY(kScreenMidPosY);
 
-        if (target_monster->getName() == "Voldemort") { //if the final monster is defeated, the player wins
+        //if the final monster is defeated, the player wins
+        if (target_monster->getName() == "Voldemort") {
             current_state = WIN;
             win_music.setLoop(TRUE);
             win_music.play();
@@ -603,8 +603,8 @@ void adventureGame::defense(Monster *monster) {
  * exit the duel mode, return to the map mode
  */
 void adventureGame::exitDuel() {
-    my_player.setPlayerPosX(ofGetWindowWidth() / 2);
-    my_player.setPlayerPosY(ofGetWindowHeight() / 2);
+    my_player.setPlayerPosX(kScreenMidPosX);
+    my_player.setPlayerPosY(kScreenMidPosY);
     target_monster = nullptr;
     bgm.setPaused(FALSE);
     current_state = IN_PROGRESS;
