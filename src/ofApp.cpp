@@ -59,6 +59,7 @@ void adventureGame::setup() {
     //font loading
     room_name_font.load("../../../data/arial.ttf", 50);
     health_name_font.load("../../../data/arial.ttf", 25);
+    button_name_font.load("../../../data/arial.ttf", 20);
     game_end_font.load("../../../data/arial.ttf", 200);
 
     //button set up
@@ -267,6 +268,10 @@ void adventureGame::drawDuelMode(Monster *target) {
 
     attack_button->setWidth(200);
     exit_button->setWidth(200);
+    
+    button_name_font.drawString("Attack: ", 800, 620);
+    button_name_font.drawString("Exit: ", 800, 770);
+    
     attack_button->draw();
     exit_button->draw();
 }
@@ -337,7 +342,7 @@ void adventureGame::drawGameWin() {
  */
 void adventureGame::positionButtons() {
     attack_button->setPosition(900, 600);
-    exit_button->setPosition(900, 800);
+    exit_button->setPosition(900, 750);
 }
 
 /*

@@ -34,6 +34,7 @@ private:
     //font file
     ofTrueTypeFont room_name_font;
     ofTrueTypeFont health_name_font;
+    ofTrueTypeFont button_name_font;
     ofTrueTypeFont game_end_font;
 
     GameState current_state = IN_PROGRESS;
